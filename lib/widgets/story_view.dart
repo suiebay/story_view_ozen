@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
@@ -410,6 +409,9 @@ class StoryView extends StatefulWidget {
   // Indicator Foreground Color
   final Color? indicatorForegroundColor;
 
+  // To control pageManager, current song
+  final dynamic pageManager;
+
   StoryView({
     required this.storyItems,
     required this.controller,
@@ -421,6 +423,7 @@ class StoryView extends StatefulWidget {
     this.onVerticalSwipeComplete,
     this.indicatorColor,
     this.indicatorForegroundColor,
+    this.pageManager,
   });
 
   @override
@@ -625,45 +628,44 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
       child: Stack(
         children: <Widget>[
           _currentView,
-          Visibility(
-            visible: widget.progressPosition != ProgressPosition.none,
-            child: Align(
-              alignment: widget.progressPosition == ProgressPosition.top
-                  ? Alignment.topCenter
-                  : Alignment.bottomCenter,
-              child: SafeArea(
-                bottom: widget.inline ? false : true,
-                // we use SafeArea here for notched and bezeles phones
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  child: PageBar(
-                    widget.storyItems
-                        .map((it) => PageData(it!.duration, it.shown))
-                        .toList(),
-                    this._currentAnimation,
-                    key: UniqueKey(),
-                    indicatorHeight: widget.inline
-                        ? IndicatorHeight.small
-                        : IndicatorHeight.large,
-                    indicatorColor: widget.indicatorColor,
-                    indicatorForegroundColor: widget.indicatorForegroundColor,
-                  ),
+          widget.progressPosition != ProgressPosition.none ? Align(
+            alignment: widget.progressPosition == ProgressPosition.top
+                ? Alignment.topCenter
+                : Alignment.bottomCenter,
+            child: SafeArea(
+              bottom: widget.inline ? false : true,
+              // we use SafeArea here for notched and bezeles phones
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                child: PageBar(
+                  widget.storyItems
+                      .map((it) => PageData(it!.duration, it.shown))
+                      .toList(),
+                  this._currentAnimation,
+                  key: UniqueKey(),
+                  indicatorHeight: widget.inline
+                      ? IndicatorHeight.small
+                      : IndicatorHeight.large,
+                  indicatorColor: widget.indicatorColor,
+                  indicatorForegroundColor: widget.indicatorForegroundColor,
                 ),
               ),
             ),
-          ),
+          ) : const Offstage(),
           Align(
               alignment: Alignment.centerRight,
               heightFactor: 1,
               child: GestureDetector(
                 onTapDown: (details) {
                   widget.controller.pause();
+                  widget.pageManager.pause();
                 },
                 onTapCancel: () {
                   widget.controller.play();
+                  widget.pageManager.play();
                 },
                 onTapUp: (details) {
                   // if debounce timed out (not active) then continue anim
