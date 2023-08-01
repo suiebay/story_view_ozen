@@ -623,6 +623,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    print("BUILDED STORYVIEW");
     return Container(
       color: Colors.white,
       child: Stack(
@@ -788,7 +789,6 @@ class PageBarState extends State<PageBar> {
   bool isPlaying(PageData page) {
     return widget.pages.firstWhereOrNull((it) => !it.shown) == page;
   }
-
   @override
   Widget build(BuildContext context) {
     return Row(
