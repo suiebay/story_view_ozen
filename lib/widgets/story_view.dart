@@ -410,7 +410,7 @@ class StoryView extends StatefulWidget {
   final Color? indicatorForegroundColor;
 
   // To control pageManager, current song
-  final dynamic pageManager;
+  final Function(String type)? notifyParent;
 
   StoryView({
     required this.storyItems,
@@ -423,7 +423,7 @@ class StoryView extends StatefulWidget {
     this.onVerticalSwipeComplete,
     this.indicatorColor,
     this.indicatorForegroundColor,
-    this.pageManager,
+    this.notifyParent,
   });
 
   @override
@@ -661,8 +661,10 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
               child: GestureDetector(
                 onTapDown: (details) {
                   widget.controller.pause();
-                  widget.pageManager.pause();
-                  print("PAUSE");
+                  if(widget.notifyParent != null) {
+                    widget.notifyParent!("pause");
+                  }
+
                 },
                 onTapCancel: () {
                   widget.controller.play();
@@ -671,8 +673,9 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
                   // if debounce timed out (not active) then continue anim
                   if (_nextDebouncer?.isActive == false) {
                     widget.controller.play();
-                    widget.pageManager.play();
-                    print("PLAY");
+                    if(widget.notifyParent != null) {
+                      widget.notifyParent!("play");
+                    }
                   } else {
                     widget.controller.next();
                   }
