@@ -666,13 +666,13 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
                 },
                 onTapCancel: () {
                   widget.controller.play();
-                  widget.pageManager.play();
-                  print("PLAY");
                 },
                 onTapUp: (details) {
                   // if debounce timed out (not active) then continue anim
                   if (_nextDebouncer?.isActive == false) {
                     widget.controller.play();
+                    widget.pageManager.play();
+                    print("PLAY");
                   } else {
                     widget.controller.next();
                   }
