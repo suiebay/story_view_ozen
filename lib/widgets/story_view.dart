@@ -781,6 +781,7 @@ class PageBarState extends State<PageBar> {
 
   @override
   void setState(fn) {
+    print("SETSTATING");
     if (mounted) {
       super.setState(fn);
     }
