@@ -509,6 +509,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
 
   @override
   void setState(fn) {
+    print("SETSTATE1");
     if (mounted) {
       super.setState(fn);
     }
@@ -780,7 +781,7 @@ class PageBarState extends State<PageBar> {
 
   @override
   void setState(fn) {
-    print("SETSTATING");
+    print("SETSTATE2");
     if (mounted) {
       super.setState(fn);
     }
