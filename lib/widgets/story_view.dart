@@ -475,21 +475,25 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
         case PlaybackState.play:
           _removeNextHold();
           this._animationController?.forward();
+          print("PlaybackState.play");
           break;
 
         case PlaybackState.pause:
           _holdNext(); // then pause animation
           this._animationController?.stop(canceled: false);
+          print("PlaybackState.pause");
           break;
 
         case PlaybackState.next:
           _removeNextHold();
           _goForward();
+          print("PlaybackState.next");
           break;
 
         case PlaybackState.previous:
           _removeNextHold();
           _goBack();
+          print("PlaybackState.previous");
           break;
       }
     });
@@ -516,6 +520,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
   }
 
   void _play() {
+    print(" _play()");
     _animationController?.dispose();
     // get the next playing page
     final storyItem = widget.storyItems.firstWhere((it) {
@@ -533,9 +538,11 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
       if (status == AnimationStatus.completed) {
         storyItem.shown = true;
         if (widget.storyItems.last != storyItem) {
+          print("_beginPlay()");
           _beginPlay();
         } else {
           // done playing
+          print(" _onComplete()");
           _onComplete();
         }
       }
@@ -568,6 +575,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
   }
 
   void _goBack() {
+    print(" _goBack()");
     _animationController!.stop();
 
     if (this._currentStory == null) {
@@ -588,6 +596,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
   }
 
   void _goForward() {
+    print(" _goForward()");
     if (this._currentStory != widget.storyItems.last) {
       _animationController!.stop();
 
@@ -608,16 +617,19 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin {
   }
 
   void _clearDebouncer() {
+    print(" _clearDebouncer()");
     _nextDebouncer?.cancel();
     _nextDebouncer = null;
   }
 
   void _removeNextHold() {
+    print(" _removeNextHold()");
     _nextDebouncer?.cancel();
     _nextDebouncer = null;
   }
 
   void _holdNext() {
+    print(" _holdNext()");
     _nextDebouncer?.cancel();
     _nextDebouncer = Timer(Duration(milliseconds: 500), () {});
   }
